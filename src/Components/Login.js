@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react'
 import Header from './Header'
 import Validations from '../Utils/Validations';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from '../Utils/Firebase';
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -16,8 +18,49 @@ const Login = () => {
   }
 
   const handleFormData = () => {
-    const message = Validations(emailFieldRef.current.value, passwordFieldRef.current.value, nameFieldRef.current.value);
-    setErrorMsg(message);
+    var emailFieldValue = emailFieldRef.current.value;
+    var passwordFieldValue = passwordFieldRef.current.value;
+    var nameFieldValue = nameFieldRef.current.value;
+
+    const errorMessage = Validations(emailFieldValue, passwordFieldValue, nameFieldValue);
+    setErrorMsg(errorMessage);
+    if (errorMessage) return;
+
+    // No Errors | Create a new user OR Sign in user 
+
+    if (isSignUp) {
+      // Sign up User
+
+      createUserWithEmailAndPassword(auth, emailFieldValue, passwordFieldValue)
+        .then((userCredential) => {
+          // Signed up 
+          const user = userCredential.user;
+          console.log(user);
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+
+          setErrorMsg(errorCode + " " + errorMessage);
+          // ..
+        });
+    } else {
+      // Sign in user
+
+      signInWithEmailAndPassword(auth, emailFieldValue, passwordFieldValue)
+        .then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+          console.log(user);
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMsg(errorCode + " " +errorMessage);
+        })
+    }
   }
 
   return (
