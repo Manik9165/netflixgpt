@@ -1,13 +1,16 @@
 import React, { useRef, useState } from 'react'
 import Header from './Header'
+import { useDispatch } from "react-redux";
 import Validations from '../Utils/Validations';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from '../Utils/Firebase';
+import { addUser } from '../Utils/userSlice';
+import { BG_IMAGE } from '../Utils/Constants';
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
-
+  const dispatch = useDispatch();
   const emailFieldRef = useRef(null);
   const passwordFieldRef = useRef(null);
   const nameFieldRef = useRef(null);
@@ -35,8 +38,16 @@ const Login = () => {
         .then((userCredential) => {
           // Signed up 
           const user = userCredential.user;
-          console.log(user);
-          // ...
+          updateProfile(user, {
+            displayName: nameFieldValue
+          }).then(() => {
+            // Profile updated!
+            const { uid, displayName, email } = auth.currentUser;
+            dispatch(addUser({ uid: uid, displayName: displayName, email: email }));
+          }).catch((error) => {
+            // An error occurred
+
+          });
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -51,14 +62,11 @@ const Login = () => {
       signInWithEmailAndPassword(auth, emailFieldValue, passwordFieldValue)
         .then((userCredential) => {
           // Signed in 
-          const user = userCredential.user;
-          console.log(user);
-          // ...
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          setErrorMsg(errorCode + " " +errorMessage);
+          setErrorMsg(errorCode + " " + errorMessage);
         })
     }
   }
@@ -69,7 +77,7 @@ const Login = () => {
       {/* Background Img Section */}
       <div className='absolute'>
         <img
-          src='https://assets.nflxext.com/ffe/siteui/vlv3/ca6a7616-0acb-4bc5-be25-c4deef0419a7/c5af601a-6657-4531-8f82-22e629a3795e/IN-en-20231211-popsignuptwoweeks-perspective_alpha_website_large.jpg'
+          src= {BG_IMAGE}
           alt='LoginBgImg'
         />
       </div>
