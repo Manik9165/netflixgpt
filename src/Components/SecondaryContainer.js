@@ -1,17 +1,18 @@
 import React from 'react'
+import { useSelector } from 'react-redux';
 import MovieList from './MovieList'
 
 const SecondaryContainer = () => {
+
+  const movieData = useSelector(store => store.movies);
   return (
-    <div>
-      {/* 
-      Consume movie data from movie store. 
-      pass in movie list component
-      in movie list component there will be movie card component to render all cards.
-
-      */}
-      <MovieList/>
-
+    <div className='bg-black'>
+      <div className='-mt-[15%] relative'>
+        <MovieList title={"Now Playing"} nowPlayingMovies={movieData?.nowPlayingMovies} />
+        <MovieList title={"Now Playing"} nowPlayingMovies={movieData?.nowPlayingMovies} />
+        <MovieList title={"Now Playing"} nowPlayingMovies={movieData?.nowPlayingMovies} />
+        <MovieList title={"Now Playing"} nowPlayingMovies={movieData?.nowPlayingMovies} />
+      </div>
     </div>
   )
 }

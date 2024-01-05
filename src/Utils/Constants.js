@@ -8,3 +8,9 @@ export const API_OPTIONS = {
         Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0M2MwNmZiNTU0OWY4NjNmZjMyYTc2ZjQxY2Y4MjU5ZCIsInN1YiI6IjY1OGU5ZTg1OWYxYmU3N2I2MjgwY2I4ZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LYFifuiPWrlgM0uzb71XJe3jKClAo8husTjZPh0CaZU'
     }
 };
+
+export const OPENAI_API_KEY = "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"
+
+export const IMAGE_URL = "https://image.tmdb.org/t/p/w500/"
+
+export const GPT_QUERY = "Please provide 5 movie names (only names nothing else) in comma seperated manner Like A,B,C. For the query - "
